@@ -64,7 +64,6 @@
             this.label1.Size = new System.Drawing.Size(639, 78);
             this.label1.TabIndex = 0;
             this.label1.Text = "Демонстрація роботи з регулярнимим\r\n                         виразами";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
@@ -93,7 +92,6 @@
             this.button1.TabIndex = 3;
             this.button1.Text = "Перевірити";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // labelNumber
             // 
@@ -122,7 +120,6 @@
             this.button2.TabIndex = 7;
             this.button2.Text = "Перевірити";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // textBox2
             // 
@@ -160,7 +157,6 @@
             this.button3.TabIndex = 11;
             this.button3.Text = "Перевірити";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // textBox3
             // 
@@ -198,7 +194,6 @@
             this.button4.TabIndex = 15;
             this.button4.Text = "Перевірити";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // textBox4
             // 
@@ -236,7 +231,6 @@
             this.button5.TabIndex = 19;
             this.button5.Text = "Перевірити";
             this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // textBox5
             // 
@@ -274,7 +268,6 @@
             this.button6.TabIndex = 23;
             this.button6.Text = "Перевірити";
             this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // textBox6
             // 
@@ -293,7 +286,6 @@
             this.label13.Size = new System.Drawing.Size(68, 24);
             this.label13.TabIndex = 21;
             this.label13.Text = "E-mail:";
-            this.label13.Click += new System.EventHandler(this.label13_Click);
             // 
             // Form1
             // 
