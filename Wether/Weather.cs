@@ -16,7 +16,7 @@ namespace WeatherLibrary
 
         public Weather(string url)
         {
-            LoadData(url);  
+            LoadData(url);
         }
 
         public void LoadData(string url)
@@ -31,93 +31,42 @@ namespace WeatherLibrary
             Humidity = ExtractHumidity(html);
             WaterTemperature = ExtractWaterTemperature(html);
             Status = ExtractStatus(html);
-            string imgUrl = ExtractImage(img);
+            string imgUrl = ExtractValue(img, "<div class=\"img\"> <img width=\"\\d+\" height=\"\\d+\" src=\"(//.+.jpg)\" ");
             byte[] imageData = webClient.DownloadData(imgUrl);
             Image = imageData;
         }
-        private static string ExtractImage(string html)
+
+        private static string ExtractValue(string html, string pattern)
         {
-            Regex regex =
-                new Regex(" <div class=\"img\"> <img width=\"\\d+\" height=\"\\d+\" src=\"(\\/\\/.+\\.jpg)\" ", RegexOptions.Compiled);
+            Regex regex = new Regex(pattern, RegexOptions.Compiled);
             Match match = regex.Match(html);
-            if (match.Success)
-            {
-                return "https:"+match.Groups[1].Value;
-            }
-            else return "помилка";
+            return match.Success ? match.Groups[1].Value : "помилка";
         }
-        private static string ExtractStatus(string html)
+
+        private static double ExtractNumericValue(string html, string pattern)
         {
-            Regex regex =
-                new Regex("<div class=\"now-desc\">(.+)<\\/div><div class=\"now-info\">",RegexOptions.Compiled);
-            Match match = regex.Match(html);
-            if (match.Success)
-            {
-                return match.Groups[1].Value;
-            }
-            else return "помилка";
+            string value = ExtractValue(html, pattern);
+            return int.TryParse(value, out int result) ? result : 0;
         }
-        private static string ExtractWindDirection(string html)
-        {
-            Regex regex =
-                new Regex("м\\/c<br>([А-Яа-яІіЇї]+)<\\/span>", RegexOptions.Compiled);
-            Match match = regex.Match(html);
-            if (match.Success)
-            {
-                return match.Groups[1].Value;
-            }
-            else return "помилка";
-        }
-        private static double ExtractWaterTemperature(string html)
-        {
-            Regex regex =
-                new Regex("\"temperatureWater\":\\[([+-]?\\d+)\\],",RegexOptions.Compiled);
-            Match match = regex.Match(html);
-            if (match.Success)
-            {
-                string text = match.Groups[1].Value;
-                return int.Parse(text);
-            }
-            else return 0;
-        }
-        private static double ExtractHumidity(string html)
-        {
-            Regex regex =
-                new Regex("\"humidity\":\\[(\\d+)\\],",RegexOptions.Compiled);
-            Match match = regex.Match(html);
-            if (match.Success)
-            {
-                string text = match.Groups[1].Value;
-                return int.Parse(text);
-            }
-            else return 0;
-        }
-        private static double ExtractWind(string html)
-        {
-            Regex regex =
-                new Regex("windSpeed\":\\[(\\d+)\\]",RegexOptions.Compiled);
-            Match match = regex.Match(html);
-            if (match.Success)
-            {
-                string text = match.Groups[1].Value;
-                return int.Parse(text);
-            }
-            else return 0;
-        }
-        private static double ExtractTemperature(string html)
-        {
-            Regex regex =
-                new Regex(
-                    "class=\"now-weather\"><span class=\"unit-temperature\" data-temperature-f=\"\\d+\">([+-]?\\d+)<\\/span>",
-                    RegexOptions.Compiled);
-            Match match = regex.Match(html);
-            if (match.Success)
-            {
-                string text = match.Groups[1].Value;
-                return int.Parse(text);
-            }
-            else return 0;
-        }
+
+        private static string ExtractStatus(string html) =>
+            ExtractValue(html, "<div class=\"now-desc\">(.+)</div><div class=\"now-info\">");
+
+        private static string ExtractWindDirection(string html) =>
+            ExtractValue(html, "м/c<br>([А-Яа-яІіЇї]+)</span>");
+
+        private static double ExtractWaterTemperature(string html) =>
+            ExtractNumericValue(html, "\"temperatureWater\":[([+-]?\\d+)],");
+
+        private static double ExtractHumidity(string html) =>
+            ExtractNumericValue(html, "\"humidity\":[(\\d+)],");
+
+        private static double ExtractWind(string html) =>
+            ExtractNumericValue(html, "windSpeed\":[(\\d+)]");
+
+        private static double ExtractTemperature(string html) =>
+            ExtractNumericValue(html, "class=\"now-weather\"><span class=\"unit-temperature\" data-temperature-f=\"\\d+\">([+-]?\\d+)</span>");
+
         public byte[] Image
         {
             get => image;
